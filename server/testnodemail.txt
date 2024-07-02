@@ -1,0 +1,36 @@
+import nodeMailer from 'nodemailer'
+import dotenv from "dotenv"
+dotenv.config({ path: 'info.env' })
+
+const EMAIL = process.env.EMAIL
+const PASS = process.env.NODE_MAILER_PASS
+
+
+
+const transportmail = nodeMailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: EMAIL,
+    pass: PASS
+  }
+})
+
+
+const mailContent = {
+  from: EMAIL,
+  to: "adedamolacopy@gmail.com",
+  subject: "Password reset code",
+  html: "<h1>Your password  reset code is: {resetCode}</h1>"
+}
+
+transportmail.sendMail(mailContent, (error, info)=> {
+  try {
+    if(error){
+      console.log(error);
+    }else{
+    console.log(info.messageId, "user received reset password");
+    }
+  } catch (error) {
+    console.log(error, "Error message");
+  }
+})
